@@ -1,0 +1,10 @@
+### POST
+POST http://localhost:8080/index.html
+Content-Type: application/json
+
+{
+   "eventDate": "2022-02-24",
+    "location": "Kyiv",
+    "description": "Beginning of the invasion",
+    "conflictId": 1
+}

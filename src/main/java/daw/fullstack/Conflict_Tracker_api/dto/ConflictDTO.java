@@ -9,6 +9,4 @@ public class ConflictDTO {
     public LocalDate startDate;
     public Conflict.Status status;
     public String description;
-
-
 }
