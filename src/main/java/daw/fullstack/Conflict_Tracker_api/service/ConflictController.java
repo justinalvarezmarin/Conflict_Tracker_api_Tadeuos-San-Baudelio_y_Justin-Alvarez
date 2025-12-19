@@ -12,55 +12,43 @@ import java.util.List;
 @RequestMapping("/api/v1/conflicts")
 public class ConflictController {
 
-    @Autowired
-    private ConflictRepository conflictRepository;
+    private final ConflictService conflictService;
 
-    // GET ALL + FILTER
+    public ConflictController(ConflictService conflictService) {
+        this.conflictService = conflictService;
+    }
+
     @GetMapping
-    public List<Conflict> getAll(
-            @RequestParam(required = false) Conflict.Status status) {
-
-        if (status != null) {
-            return conflictRepository.findByStatus(status);
-        }
-        return conflictRepository.findAll();
+    public List<Conflict> getAll() {
+        return conflictService.findAll();
     }
 
-    // GET BY ID
-    @GetMapping("/{id}")
-    public Conflict getById(@PathVariable Long id) {
-        return conflictRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Conflict not found"));
-    }
-
-    // POST
     @PostMapping
     public Conflict create(@RequestBody ConflictDTO dto) {
         Conflict c = new Conflict();
-        c.setName(dto.getName());
-        c.setStartDate(dto.getStartDate());
-        c.setStatus(dto.getStatus());
-        c.setDescription(dto.getDescription());
-        return conflictRepository.save(c);
+        c.setName(dto.name);
+        c.setStartDate(dto.startDate);
+        c.setStatus(Conflict.Status.valueOf(String.valueOf(dto.status)));
+        c.setDescription(dto.description);
+        return conflictService.save(c);
     }
 
-    // PUT
     @PutMapping("/{id}")
     public Conflict update(@PathVariable Long id, @RequestBody ConflictDTO dto) {
-        Conflict c = conflictRepository.findById(id)
+        Conflict c = conflictService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Conflict not found"));
 
-        c.setName(dto.getName());
-        c.setStartDate(dto.getStartDate());
-        c.setStatus(dto.getStatus());
-        c.setDescription(dto.getDescription());
+        c.setName(dto.name);
+        c.setStartDate(dto.startDate);
+        c.setStatus(Conflict.Status.valueOf(String.valueOf(dto.status)));
+        c.setDescription(dto.description);
 
-        return conflictRepository.save(c);
+        return conflictService.save(c);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        conflictRepository.deleteById(id);
+        conflictService.deleteById(id);
     }
 }
+
