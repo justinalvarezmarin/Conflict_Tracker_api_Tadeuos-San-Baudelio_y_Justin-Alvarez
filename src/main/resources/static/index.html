@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Conflict Tracker</title>
+</head>
+<body>
+<h1>Conflictos</h1>
+<table border="1">
+    <thead>
+    <tr><th>ID</th><th>Nombre</th><th>Estado</th><th>Descripción</th></tr>
+    </thead>
+    <tbody id="conflicts"></tbody>
+</table>
+
+<script>
+    fetch('/api/v1/conflicts')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('conflicts');
+            data.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${c.id}</td><td>${c.name}</td><td>${c.status}</td><td>${c.description}</td>`;
+                tbody.appendChild(tr);
+            });
+        });
+</script>
+</body>
+</html>
