@@ -2,6 +2,8 @@ package daw.fullstack.Conflict_Tracker_api.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Event {
@@ -18,6 +20,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "conflict_id")
+    @JsonIgnore
     private Conflict conflict;
 
     // Getters y setters

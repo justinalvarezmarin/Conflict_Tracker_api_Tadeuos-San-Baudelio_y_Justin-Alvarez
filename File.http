@@ -1,10 +1,73 @@
-### POST
-POST http://localhost:8080/index.html
+@baseUrl = http://localhost:8080/api/v1
+
+// =======================
+// CONFLICT
+// =======================
+
+### POST crear conflicto (EJEMPLO)
+POST {{baseUrl}}/conflicts
 Content-Type: application/json
 
 {
-   "eventDate": "2022-02-24",
-    "location": "Kyiv",
-    "description": "Beginning of the invasion",
-    "conflictId": 1
+  "name": "War in Ukraine",
+  "startDate": "2022-02-24",
+  "status": "ACTIVE",
+  "description": "Armed conflict between Ukraine and Russia."
 }
+
+### DELETE eliminar conflicto
+DELETE {{baseUrl}}/conflicts/1
+
+
+// =======================
+// COUNTRY
+// =======================
+
+### POST crear país (EJEMPLO)
+POST {{baseUrl}}/countries
+Content-Type: application/json
+
+{
+  "name": "Ukraine",
+  "code": "UKR"
+}
+
+### DELETE eliminar país
+DELETE {{baseUrl}}/countries/1
+
+
+// =======================
+// FACTION
+// =======================
+
+### POST crear facción (EJEMPLO)
+POST {{baseUrl}}/factions
+Content-Type: application/json
+
+{
+  "name": "Ukrainian Forces",
+  "conflictId": 1,
+  "countryIds": [1]
+}
+
+### DELETE eliminar facción
+DELETE {{baseUrl}}/factions/1
+
+
+// =======================
+// EVENT
+// =======================
+
+### POST crear evento (EJEMPLO)
+POST {{baseUrl}}/events
+Content-Type: application/json
+
+{
+  "eventDate": "2022-02-24",
+  "location": "Kyiv",
+  "description": "Beginning of the invasion",
+  "conflictId": 1
+}
+
+### DELETE eliminar evento
+DELETE {{baseUrl}}/events/1

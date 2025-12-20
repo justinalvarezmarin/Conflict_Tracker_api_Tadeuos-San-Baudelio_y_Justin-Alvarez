@@ -3,6 +3,8 @@ package daw.fullstack.Conflict_Tracker_api.model;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class Country {
@@ -15,9 +17,11 @@ public class Country {
     private String code;
 
     @ManyToMany(mappedBy = "countries")
+    @JsonIgnore
     private Set<Conflict> conflicts = new HashSet<>();
 
     @ManyToMany(mappedBy = "countries")
+    @JsonIgnore
     private Set<Faction> factions = new HashSet<>();
 
     // Getters y setters
