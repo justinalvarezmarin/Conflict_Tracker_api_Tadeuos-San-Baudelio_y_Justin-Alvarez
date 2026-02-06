@@ -1,0 +1,17 @@
+spring:
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.18.124:5432/customersdb
+    username: justin
+    password: justin
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: never
+      encoding: UTF-8
