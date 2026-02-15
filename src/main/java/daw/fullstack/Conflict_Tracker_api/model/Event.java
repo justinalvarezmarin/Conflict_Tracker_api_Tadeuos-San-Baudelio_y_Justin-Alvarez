@@ -12,52 +12,22 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate eventDate;
-    private String location;
-
-    @Column(length = 2000)
-    private String description;
+    private String title;
+    private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "conflict_id")
-    @JsonIgnore
     private Conflict conflict;
 
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
+    public Event() {}
 
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
+    public Long getId() { return id; }
 
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getLocation() {
-        return location;
-    }
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Conflict getConflict() {
-        return conflict;
-    }
-
-    public void setConflict(Conflict conflict) {
-        this.conflict = conflict;
-    }
-
+    public Conflict getConflict() { return conflict; }
+    public void setConflict(Conflict conflict) { this.conflict = conflict; }
 }

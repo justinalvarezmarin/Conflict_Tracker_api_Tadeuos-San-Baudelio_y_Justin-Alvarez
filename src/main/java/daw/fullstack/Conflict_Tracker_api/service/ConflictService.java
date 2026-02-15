@@ -1,34 +1,51 @@
 package daw.fullstack.Conflict_Tracker_api.service;
 
+import daw.fullstack.Conflict_Tracker_api.dto.ConflictRequestDTO;
+import daw.fullstack.Conflict_Tracker_api.dto.ConflictResponseDTO;
+import daw.fullstack.Conflict_Tracker_api.mapper.ConflictMapper;
 import daw.fullstack.Conflict_Tracker_api.model.Conflict;
 import daw.fullstack.Conflict_Tracker_api.repository.ConflictRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ConflictService {
 
-    private final ConflictRepository conflictRepository;
+    private final ConflictRepository repository;
 
-    public ConflictService(ConflictRepository conflictRepository) {
-        this.conflictRepository = conflictRepository;
+    public ConflictService(ConflictRepository repository) {
+        this.repository = repository;
     }
 
-    public List<Conflict> findAll() {
-        return conflictRepository.findAll();
+    public List<ConflictResponseDTO> getAllConflicts() {
+        return repository.findAll()
+                .stream()
+                .map(ConflictMapper::toDTO)
+                .toList();
     }
 
-    public Optional<Conflict> findById(Long id) {
-        return conflictRepository.findById(id);
+    public ConflictResponseDTO getConflictById(Long id) {
+        Conflict conflict = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Conflict not found"));
+
+        return ConflictMapper.toDTO(conflict);
     }
 
-    public Conflict save(Conflict conflict) {
-        return conflictRepository.save(conflict);
+    public ConflictResponseDTO createConflict(ConflictRequestDTO request) {
+        Conflict conflict = ConflictMapper.toEntity(request);
+        return ConflictMapper.toDTO(repository.save(conflict));
     }
 
-    public void deleteById(Long id) {
-        conflictRepository.deleteById(id);
+    public ConflictResponseDTO updateConflict(Long id, ConflictRequestDTO request) {
+        Conflict conflict = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Conflict not found"));
+
+        ConflictMapper.updateEntity(conflict, request);
+        return ConflictMapper.toDTO(repository.save(conflict));
+    }
+
+    public void deleteConflict(Long id) {
+        repository.deleteById(id);
     }
 }
