@@ -2,9 +2,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://192.168.18.124:5432/customersdb
-    username: user
-    password: user
+    url: jdbc:postgresql://localhost:5432/Conflict_Tracker_api
+    username:
+    password:
 
   jpa:
     hibernate:
