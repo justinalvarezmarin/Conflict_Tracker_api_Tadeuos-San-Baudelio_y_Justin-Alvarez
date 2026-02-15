@@ -3,8 +3,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://192.168.18.124:5432/customersdb
-    username: justin
-    password: justin
+    username: user
+    password: user
 
   jpa:
     hibernate:
