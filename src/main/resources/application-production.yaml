@@ -1,19 +1,33 @@
 spring:
+  config:
+    activate:
+      on-profile: production
+
   datasource:
-    # Concatenamos 'jdbc:' al inicio de la variable de entorno
+    # Según tu imagen, DB_URL ya tiene 'postgresql://', así que solo añadimos 'jdbc:'
     url: jdbc:${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
   jpa:
     hibernate:
-      ddl-auto: update
+      # Usa la variable DDL_AUTO que tienes en 'update'
+      ddl-auto: ${DDL_AUTO}
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        # Esto es muy importante si usas el Pooler de Supabase
-        hibernate.temp.use_jdbc_metadata_defaults: false
+        # Evita errores de metadatos al conectar con el Pooler de Supabase (puerto 6543)
+        temp:
+          use_jdbc_metadata_defaults: false
+        format_sql: true
 
 server:
-  port: ${PORT:8080}
+  # Usa la variable PORT (8080) configurada en Railway
+  port: ${PORT}
