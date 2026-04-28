@@ -2,7 +2,7 @@ spring:
   application:
     name: conflicttracker
   profiles:
-    active: prod  # Ahora coincide con 'application-prod.yml'
+    active: prod
 
   jpa:
     show-sql: true
