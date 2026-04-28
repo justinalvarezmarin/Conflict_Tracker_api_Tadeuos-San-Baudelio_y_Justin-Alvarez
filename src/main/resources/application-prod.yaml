@@ -12,7 +12,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+    # Esto evita errores de conexión al arrancar en Render
     defer-datasource-initialization: true
 
 server:
-  port: ${PORT:8080}
+  port: 8080
