@@ -1,13 +1,10 @@
 spring:
-  application:
-    name: Conflict_Tracker
-
   datasource:
-    url: ${DB_URL}
+    # Concatenamos 'jdbc:' al inicio de la variable de entorno
+    url: jdbc:${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,6 +12,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Esto es muy importante si usas el Pooler de Supabase
+        hibernate.temp.use_jdbc_metadata_defaults: false
 
 server:
   port: ${PORT:8080}
