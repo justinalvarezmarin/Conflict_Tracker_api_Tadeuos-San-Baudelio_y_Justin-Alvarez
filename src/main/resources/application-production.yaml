@@ -8,23 +8,26 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 5
-      connection-timeout: 30000
-      # Añadimos un pequeño retraso para permitir que la red se estabilice
-      initialization-fail-timeout: 0
+      maximum-pool-size: 3 # Reducimos el pool para no saturar el pooler de Supabase
+      connection-timeout: 45000 # Damos un poco más de margen (45s)
+      keepalive-time: 30000
   jpa:
     hibernate:
+      # CAMBIO CLAVE: Cambia 'update' por 'none' si ya tienes las tablas creadas.
+      # Si es la primera vez, déjalo en 'update' pero añade las líneas de abajo.
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        # Crucial: evita que Hibernate intente "adivinar" cosas de la DB por red
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # EVITA que Hibernate intente validar o extraer información de metadatos
         temp:
           use_jdbc_metadata_defaults: false
         boot:
           allow_jdbc_metadata_access: false
-        # Forzamos el dialecto para que no tenga que preguntar a la red cuál usar
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Estas dos líneas son críticas para el Pooler de Supabase
+        hibernate.jdbc.lob.non_contextual_creation: true
+        hibernate.order_updates: true
 
 server:
   port: ${PORT:8080}
