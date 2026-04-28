@@ -2,32 +2,23 @@ spring:
   config:
     activate:
       on-profile: production
-
   datasource:
-    # Según tu imagen, DB_URL ya tiene 'postgresql://', así que solo añadimos 'jdbc:'
-    url: jdbc:${DB_URL}
+    # Aquí es donde añadimos manualmente los protocolos para que la URL sea válida
+    url: jdbc:postgresql://${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    hikari:
-      maximum-pool-size: 5
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
-
   jpa:
     hibernate:
-      # Usa la variable DDL_AUTO que tienes en 'update'
-      ddl-auto: ${DDL_AUTO}
+      ddl-auto: ${DDL_AUTO:update}
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        # Evita errores de metadatos al conectar con el Pooler de Supabase (puerto 6543)
-        temp:
-          use_jdbc_metadata_defaults: false
-        format_sql: true
+        # Esto soluciona el aviso 'HHH90000021' de tu log
+        boot:
+          allow_jdbc_metadata_access: false
+        # Esto soluciona el aviso 'HHH90000025' de tu log (limpia el dialecto)
+        # dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  # Usa la variable PORT (8080) configurada en Railway
-  port: ${PORT}
+  port: ${PORT:8080}
