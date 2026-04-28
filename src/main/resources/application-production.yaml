@@ -3,31 +3,33 @@ spring:
     activate:
       on-profile: production
   datasource:
+    # IMPORTANTE: Asegúrate de que tu variable DB_URL en Railway
+    # NO empiece por "jdbc:postgresql://", solo el host.
     url: jdbc:postgresql://${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 3 # Reducimos el pool para no saturar el pooler de Supabase
-      connection-timeout: 45000 # Damos un poco más de margen (45s)
-      keepalive-time: 30000
+      maximum-pool-size: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
   jpa:
     hibernate:
-      # CAMBIO CLAVE: Cambia 'update' por 'none' si ya tienes las tablas creadas.
-      # Si es la primera vez, déjalo en 'update' pero añade las líneas de abajo.
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        # EVITA que Hibernate intente validar o extraer información de metadatos
+        # Estas líneas evitan que Spring intente conectar antes de tiempo
         temp:
           use_jdbc_metadata_defaults: false
         boot:
           allow_jdbc_metadata_access: false
-        # Estas dos líneas son críticas para el Pooler de Supabase
-        hibernate.jdbc.lob.non_contextual_creation: true
-        hibernate.order_updates: true
+        # Compatibilidad específica para el pooler de Supabase
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 server:
   port: ${PORT:8080}
