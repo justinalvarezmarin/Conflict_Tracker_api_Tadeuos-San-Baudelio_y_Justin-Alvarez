@@ -1,27 +1,18 @@
-spring:
-  application:
-    name: Conflict_Tracker_api_Tadeuos-San-Baudelio_y_Justin-Alvarez
+spring.application.name: Conflict_Tracker_api_Tadeuos-San-Baudelio_y_Justin-Alvarez
+spring.profiles.active: prod
 
-  profiles:
-    active: prod
+# Configuración directa sin jerarquías peligrosas
+spring.datasource.url: ${DB_URL}
+spring.datasource.username: ${DB_USER}
+spring.datasource.password: ${DB_PASSWORD}
+spring.datasource.driver-class-name: org.postgresql.Driver
 
-  datasource:
-    # Eliminamos cualquier valor por defecto. Si no hay variable, la app debe fallar con "URL not found"
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+# Forzar JPA a usar Postgres y no buscar en local
+spring.jpa.database: postgresql
+spring.jpa.hibernate.ddl-auto: update
+spring.jpa.show-sql: true
+spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql: true
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    # Esto fuerza a Hibernate a no intentar adivinar nada y usar Postgres directamente
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-server:
-  port: ${PORT:8080}
+# Puerto para Railway
+server.port: ${PORT:8080}
