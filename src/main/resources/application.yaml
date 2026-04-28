@@ -1,18 +1,22 @@
-spring.application.name: Conflict_Tracker
-spring.profiles.active: prod
+spring:
+  application:
+    name: Conflict_Tracker
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
 
-# Configuración directa sin jerarquías peligrosas
-spring.datasource.url: ${DB_URL}
-spring.datasource.username: ${DB_USER}
-spring.datasource.password: ${DB_PASSWORD}
-spring.datasource.driver-class-name: org.postgresql.Driver
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
-# Forzar JPA a usar Postgres y no buscar en local
-spring.jpa.database: postgresql
-spring.jpa.hibernate.ddl-auto: update
-spring.jpa.show-sql: true
-spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-spring.jpa.properties.hibernate.format_sql: true
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_AUTO}
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
-# Puerto para Railway
-server.port: ${PORT:8080}
+server:
+  port: ${PORT}
