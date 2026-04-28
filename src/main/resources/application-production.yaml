@@ -3,24 +3,23 @@ spring:
     activate:
       on-profile: production
   datasource:
-    # Asegúrate de que no haya espacios al final de la variable en Railway
-    url: jdbc:${DB_URL}
+    # AQUÍ ESTABA EL ERROR: Faltaba 'postgresql://' después de 'jdbc:'
+    url: jdbc:postgresql://${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      connection-timeout: 30000
       maximum-pool-size: 5
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        # Esto es vital para evitar el error de red en el arranque
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
           use_jdbc_metadata_defaults: false
-        # Forzamos a Hibernate a no ser tan "curioso" con la red al principio
         boot:
           allow_jdbc_metadata_access: false
 
