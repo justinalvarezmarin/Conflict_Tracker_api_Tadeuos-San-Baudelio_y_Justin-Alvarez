@@ -2,29 +2,32 @@ spring:
   application:
     name: Conflict_Tracker_api_Tadeuos-San-Baudelio_y_Justin-Alvarez
 
-  # Mantenemos el perfil dev por defecto para cuando trabajes en local
+  # Quitamos el 'active: dev' fijo para que Railway pueda mandar su propio perfil
   profiles:
-    active: dev
+    active: ${SPRING_PROFILES_ACTIVE}
 
   datasource:
-    # Intenta leer la variable de la nube, si no existe, usa localhost
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/conflict_db}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:admin}
+    # Si DB_URL no existe, fallará rápido en lugar de conectar a localhost
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      # 'update' es vital para que Spring cree las tablas en Supabase por ti
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        # Dialecto específico para PostgreSQL (importante para Supabase)
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    # Esto evita problemas de conexión lenta en el arranque
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  # Configuración para que Railway/Render asigne el puerto automáticamente
   main:
     allow-bean-definition-overriding: true
+
 server:
+  # Railway inyecta el puerto automáticamente en la variable PORT
   port: ${PORT:8080}
