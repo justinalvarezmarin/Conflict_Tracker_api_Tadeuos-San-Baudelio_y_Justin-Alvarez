@@ -1,4 +1,4 @@
-spring.application.name: Conflict_Tracker_api_Tadeuos-San-Baudelio_y_Justin-Alvarez
+spring.application.name: Conflict_Tracker
 spring.profiles.active: prod
 
 # Configuración directa sin jerarquías peligrosas
