@@ -44,6 +44,31 @@ La aplicacion utiliza una base de datos H2 en memoria para el entorno de desarro
 * Usuario: SA
 * Contrasena: (vacia)
 
+# ⚙️ Notas del Backend (Spring Boot + Railway)
+
+Aquí explico los líos que tuvimos con el servidor de Java y cómo los arreglamos para que no petara al subirlo a la nube. Como no somos expertos, nos costó entender por qué en nuestro PC iba bien y en internet no.
+
+### 1. El lío de las Variables de Entorno (DB)
+**El problema:** En mi ordenador usamos el MySQL local con usuario `root` y sin contraseña. Pero en **Railway**, la base de datos tiene otros datos (URL, usuario y pass raros).
+**La solución:** En el archivo `application.properties`, no pusimos los datos a mano. Usamos "huecos" (variables) que Railway rellena solo:
+* `spring.datasource.url=${MYSQL_URL}`
+* `spring.datasource.username=${MYSQLUSER}`
+  Si no pones esto así, el servidor intenta buscar el MySQL de tu casa dentro de Railway... y claro, no encuentra nada y da error de conexión.
+
+### 2. El error de las CORS (El "Portero de Discoteca")
+**El problema:** Este fue el error más pesado. El Frontend (Vercel) intentaba pedir datos y el navegador sacaba un error rojo gigante de **CORS**.
+**La solución:** Por seguridad, Java viene bloqueado para que nadie externo le pida cosas. Tuvimos que crear una clase `WebConfig` para decirle: *"Oye, deja pasar a la web de Vercel, que es mi amiga"*.
+Sin esto, aunque el servidor funcione, el navegador te corta el grifo.
+
+### 3. El puerto dinámico (`server.port`)
+**El problema:** En mi PC usamos siempre el puerto `8080`, pero en Railway el servidor se enciende en un puerto distinto cada vez.
+**La solución:** Usamos la variable `server.port=${PORT:8080}`. Esto le dice a Java: *"Usa el puerto que te asigne Railway, y si no hay ninguno (como en mi casa), usa el 8080"*. Si no haces esto, Railway nunca llega a detectar que tu app ha arrancado.
+
+### 4. El último gran fallo: Localhost vs Railway
+**El problema:** Aunque el Backend estaba perfecto, el Frontend seguía intentando llamar a `localhost:8080`.
+**Lo que aprendimos:** Que hay que avisarle al Frontend de que la URL ha cambiado. Mientras en la consola sigas viendo `localhost`, es que la conexión está rota porque el Front está buscando los datos en el sitio equivocado.
+
+
 ## Autores
 * Justin Alvarez
 * Tadeuos San Baudelio
